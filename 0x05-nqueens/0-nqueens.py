@@ -3,7 +3,6 @@
 """
 import sys
 
-
 solutions = []
 """The list of possible solutions to the N queens problem.
 """
@@ -89,12 +88,15 @@ def build_solution(row, group):
     else:
         for col in range(n):
             a = (row * n) + col
-            matches = zip(list([pos[a]]) * len(group), group)
-            used_positions = map(lambda x: is_attacking(x[0], x[1]), matches)
-            group.append(pos[a].copy())
-            if not any(used_positions):
+            valid = True
+            for grp_pos in group:
+                if is_attacking(pos[a], grp_pos):
+                    valid = False
+                    break
+            if valid:
+                group.append(pos[a].copy())
                 build_solution(row + 1, group)
-            group.pop(len(group) - 1)
+                group.pop()
 
 
 def get_solutions():
